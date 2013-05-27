@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.hyperionics.TtsSetup" android:versionCode="1000000" android:versionName="1.0.0">
+  <uses-sdk android:targetSdkVersion="15" android:minSdkVersion="15" />
+  <application android:label="TtsSetup" android:name="mono.android.app.Application">
+    <activity android:icon="@drawable/icon" android:label="TtsSetup" android:name="ttssetup.TestVoiceAsync" />
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="com.hyperionics.TtsSetup.mono.MonoRuntimeProvider.__mono_init__" />
+    <activity android:icon="@drawable/icon" android:label="TtsSetup" android:name="com.hyperionics.ttssetup.TrialSplashScreend5bca3e21ed24fd8a72ae27c2b2b47b6" android:theme="@style/Mono.Android.Theme.Splash" android:noHistory="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+  </application>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+</manifest>

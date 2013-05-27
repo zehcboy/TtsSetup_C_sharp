@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+        >
+
+<LinearLayout android:orientation="vertical"
+              android:gravity="center"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+
+    <LinearLayout android:id="@+id/wait"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="16dip"
+                  android:visibility="gone"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/please_wait"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                />
+
+        <ProgressBar
+                style="android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_gravity="center"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/main"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dip"
+                  android:visibility="visible"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sel_lang1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sel_lang2"
+                android:textSize="12dip"/>
+
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="55dip"
+                android:id="@+id/languages"
+                android:prompt="@string/tts_langs"
+                android:layout_marginBottom="10dip"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sel_voice"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/sel_lang"
+                />
+
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="55dip"
+                android:id="@+id/voices"
+                android:prompt="@string/tts_voices"
+                android:layout_marginBottom="10dip"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_new1"
+                android:layout_marginBottom="4dip"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_new2"
+                android:layout_marginBottom="4dip"
+                />
+
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+            <Button
+                    android:id="@+id/add_lang_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="@string/add_lang"
+                    android:layout_weight="1"
+                    />
+
+            <Button
+                    android:id="@+id/use_voice_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/use_voice"
+                    android:layout_weight="1"
+                    />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>
