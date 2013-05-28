@@ -16,26 +16,23 @@ namespace TtsSetup
     // other purposes too, remove TTS stuff if you only need StartActivityForResultAsync() 
     public class TtsAsyncActivity : Activity, TextToSpeech.IOnInitListener
     {
-        private int _requestWanted = 0;
-        private Intent _lastData = null;
-        private OperationResult _lastStatus;
-        private readonly AutoResetEvent _event1 = new AutoResetEvent(false);
         protected const String TAG = "TtsSetup";
+        private int _requestWanted = 0;
+        private TaskCompletionSource<OperationResult> _tcsOr;
+        private TaskCompletionSource<Intent> _tcsIn;
 
         // Creates TTS object and waits until it's initialized. Returns initialized object,
         // or null if error.
         protected async Task<TextToSpeech> CreateTtsAsync(Context context, String engName)
         {
-            _lastStatus = OperationResult.Error;
+            _tcsOr = new TaskCompletionSource<OperationResult>();
             var tts = new TextToSpeech(context, this, engName);
-
-            await Task.Run(delegate { _event1.WaitOne(); });
-
-            if (_lastStatus != OperationResult.Success)
+            if (await _tcsOr.Task != OperationResult.Success)
             {
                 Log.Debug(TAG, "Engine: " + engName + " failed to initialize.");
-                return null;
+                tts = null;
             }
+            _tcsOr = null;
             return tts;
         }
 
@@ -44,19 +41,21 @@ namespace TtsSetup
         // For sure, it could be written better to avoid class-wide _lastData member...
         protected async Task<Intent> StartActivityForResultAsync(Intent intent, int requestCode)
         {
+            Intent data = null;
             try
             {
-                _lastData = null;
+                _tcsIn = new TaskCompletionSource<Intent>();
                 _requestWanted = requestCode;
                 StartActivityForResult(intent, requestCode);
                 // possible exceptions: ActivityNotFoundException, also got SecurityException from com.turboled
-                await Task.Run(delegate { _event1.WaitOne(); });
+                data = await _tcsIn.Task;
             }
             catch (Exception e)
             {
                 Log.Debug(TAG, "StartActivityForResult() exception: " + e);
             }
-            return _lastData;
+            _tcsIn = null;
+            return data;
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -64,16 +63,14 @@ namespace TtsSetup
             base.OnActivityResult(requestCode, resultCode, data);
             if (requestCode == _requestWanted)
             {
-                _lastData = data;
-                _event1.Set();
+                _tcsIn.SetResult(data);
             }
         }
 
         void TextToSpeech.IOnInitListener.OnInit(OperationResult status)
         {
-            _lastStatus = status;
             Log.Debug(TAG, "OnInit() status = " + status);
-            _event1.Set();
+            _tcsOr.SetResult(status);
         }
 
     }
