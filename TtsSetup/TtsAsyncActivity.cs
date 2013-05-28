@@ -11,6 +11,10 @@ using Android.Util;
 
 namespace TtsSetup
 {
+    // NOTE: This is my old implementation with AutoResetEvent, before I learned of
+    // TaskCompletionSource<T>, which is a much better way of syncing callbacks.
+    // See the 'master' branch of GitHub repo for this correct way.
+    //
     // Base class for an activity to create an initialized TextToSpeech object anynchroneously,
     // and starting intents for result anynchroneously, awaiting their result. Could be used for
     // other purposes too, remove TTS stuff if you only need StartActivityForResultAsync() 
