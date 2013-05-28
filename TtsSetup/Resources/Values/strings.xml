@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TTS Setup</string>
+    <string name="app_name">TTS Setup (C#)</string>
     <string name="please_wait">Please wait while we search for all available TTS languages and voices...</string>
     <string name="choose_tts">Select TTS Engine</string>
     <string name="sys_def_tts">Default system TTS Engine</string>

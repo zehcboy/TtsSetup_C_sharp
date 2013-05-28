@@ -15,7 +15,7 @@ using Object = Java.Lang.Object;
 namespace TtsSetup
 {
     [Activity(Label = "TtsSetup", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
-    public class TestVoiceAsync : Activity
+    public class TestVoiceAsync : TtsAsyncActivity
     {
         public const String SELECTED_ENGINE = "com.hyperionics.TtsSetup.SELECTED_ENGINE";
         public const String SELECTED_VOICE = "com.hyperionics.TtsSetup.SELECTED_VOICE";
@@ -26,11 +26,8 @@ namespace TtsSetup
         private const int LANG_REQUEST = 101;
         private const int SAMP_REQUEST = 102;
         private const int ADDED_REQUEST = 103;
-        private const String TAG = "TtsSetup";
-        private static readonly AutoResetEvent Event1 = new AutoResetEvent(false);
         private readonly List<EngLang> _allEngines = new List<EngLang>();
         private readonly List<LangCodeName> _langCodes = new List<LangCodeName>();
-        private Intent _lastData;
         private TextToSpeech _tts;
         private bool _ttsStillNeeded = false;
         private EngLang _selectedEngine = null;
@@ -39,7 +36,6 @@ namespace TtsSetup
         private List<EngInt> _eli;
         private bool _testVoiceStarted = false;
         private IDictionary<String, String> _paramMap = new Dictionary<String, String>();
-
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -61,9 +57,7 @@ namespace TtsSetup
                     {
                         _tts.Shutdown();
                     }
-                    catch (Exception e)
-                    {
-                    }
+                    catch { /* don't care*/ }
                     finally
                     {
                         _tts = null;
@@ -75,12 +69,7 @@ namespace TtsSetup
         {
             base.OnActivityResult(requestCode, resultCode, data);
             _ttsStillNeeded = false;
-            if (requestCode == LANG_REQUEST)
-            {
-                _lastData = data;
-                Event1.Set();
-            }
-            else if (requestCode == SAMP_REQUEST)
+            if (requestCode == SAMP_REQUEST)
             {
                 String sample = null;
                 if (data != null)
@@ -96,7 +85,10 @@ namespace TtsSetup
                             sample = sample.Substring(0, 255);
                         _tts.Speak(sample, QueueMode.Flush, _paramMap);
                     }
-                    catch {}
+                    catch (Exception e)
+                    {
+                        Log.Debug(TAG, "_tts.Speak() exception: " + e);
+                    }
             }
             else if (requestCode == ADDED_REQUEST)
             {
@@ -112,14 +104,12 @@ namespace TtsSetup
             {
                 _tts.Shutdown();
             }
-            catch (Exception)
-            {
-            }
+            catch { /* don't care */ }
 
             foreach (TextToSpeech.EngineInfo ei in engines)
             {
                 Log.Debug(TAG, "Trying to create TTS Engine: " + ei.Name);
-                _tts = await CreateTtsAsync(ei.Name);
+                _tts = await CreateTtsAsync(this, ei.Name);
                 if (_tts != null)
                 {
                     var el = new EngLang(ei);
@@ -127,11 +117,11 @@ namespace TtsSetup
                     Log.Debug(TAG, "Engine: " + ei.Name + " initialized correctly.");
                     var intent = new Intent(TextToSpeech.Engine.ActionCheckTtsData);
                     intent = intent.SetPackage(el.Ei.Name);
-                    await StartActivityForResultAsync(intent, LANG_REQUEST);
+                    Intent data = await StartActivityForResultAsync(intent, LANG_REQUEST);
                     try
                     {
                         // don't care if lastData or voices comes out null, just catch exception and continue
-                        IList<String> voices = _lastData.GetStringArrayListExtra(TextToSpeech.Engine.ExtraAvailableVoices);
+                        IList<String> voices = data.GetStringArrayListExtra(TextToSpeech.Engine.ExtraAvailableVoices);
                         Log.Debug(TAG, "Listing voices for " + el.Name() + " (" + el.Label() + "):");
                         foreach (String s in voices)
                         {
@@ -139,12 +129,15 @@ namespace TtsSetup
                             Log.Debug(TAG, "- " + s);
                         }
                     }
-                    catch {}
+                    catch (Exception e)
+                    {
+                        Log.Debug(TAG, "Engine " + el.Name() + " listing voices exception: " + e);
+                    }
                     try
                     {
                         _tts.Shutdown();
                     }
-                    catch {}
+                    catch { /* don't care */ }
                     _tts = null;
                 }
             }
@@ -293,9 +286,9 @@ namespace TtsSetup
             Log.Debug(TAG, "TestVoice: " + pckName + ", " + langVoice);
             if (_tts != null) try {
                 _tts.Shutdown();
-            } catch {}
+            } catch { /* don't care */ }
 
-            _tts = await CreateTtsAsync(pckName);
+            _tts = await CreateTtsAsync(this, pckName);
             if (_tts != null)
             {
                 Locale loc = LangSupport.LocaleFromString(langVoice);
@@ -319,7 +312,7 @@ namespace TtsSetup
                         _ttsStillNeeded = true;
                         StartActivityForResult(intent, SAMP_REQUEST); // goes to onActivityResult()
                     }
-                    catch (Exception)
+                    catch
                     {
                         _ttsStillNeeded = false;
                     } // ActivityNotFoundException, possibly others
@@ -354,47 +347,12 @@ namespace TtsSetup
 
         void addBtn_Click(object sender, EventArgs e)
         {
-//            Intent intent = new Intent(this, AddVoice.class);
-//            StartActivityForResult(intent, ADDED_REQUEST);
+            // Needs implementation, adding new voices to the current engine or installing new engine
         }
 
         void useBtn_Click(object sender, EventArgs e)
         {
             UseSelected();
-        }
-
-        // Starts activity for results and waits for this result. Calling function may
-        // inspect _lastData private member to get this result, or null if any error.
-        // For sure, it could be written better to avoid class-wide _lastData member...
-        private async Task StartActivityForResultAsync(Intent intent, int requestCode)
-        {
-            try
-            {
-                _lastData = null;
-                Event1.Reset();
-                StartActivityForResult(intent, requestCode);
-                    // possible exceptions: ActivityNotFoundException, also got SecurityException from com.turboled
-                await Task.Run(delegate { Event1.WaitOne(); });
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        // Creates TTS object and waits until it's initialized. Returns initialized object,
-        // or null if error.
-        private async Task<TextToSpeech> CreateTtsAsync(String engName)
-        {
-            var ttsInit = new TtsInit();
-            Event1.Reset();
-            var tts = new TextToSpeech(this, ttsInit, engName);
-            await Task.Run(delegate { Event1.WaitOne(); });
-            if (ttsInit.LastStatus != OperationResult.Success)
-            {
-                Log.Debug(TAG, "Engine: " + engName + " failed to initialize.");
-                return null;
-            }
-            return tts;
         }
 
         private class EngLang
@@ -468,18 +426,6 @@ namespace TtsSetup
 // ReSharper disable StringCompareIsCultureSpecific.3
                 return String.Compare(Name, o.Name, true);
 // ReSharper restore StringCompareIsCultureSpecific.3
-            }
-        }
-
-        private class TtsInit : Object, TextToSpeech.IOnInitListener
-        {
-            public OperationResult LastStatus { get; private set; }
-
-            void TextToSpeech.IOnInitListener.OnInit(OperationResult status)
-            {
-                LastStatus = status;
-                Log.Debug(TAG, "OnInit() status = " + status);
-                Event1.Set();
             }
         }
 

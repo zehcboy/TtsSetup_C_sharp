@@ -10,7 +10,7 @@
         <category android:name="mono.android.intent.category.SEPPUKU.com.hyperionics.TtsSetup" />
       </intent-filter>
     </receiver>
-    <activity android:icon="@drawable/icon" android:label="TtsSetup" android:theme="@style/Mono.Android.Theme.Splash" android:name="com.hyperionics.ttssetup.TrialSplashScreen0a6958352a014a08877fffaa17cd2730" android:noHistory="true">
+    <activity android:icon="@drawable/icon" android:label="TtsSetup" android:theme="@style/Mono.Android.Theme.Splash" android:name="com.hyperionics.ttssetup.TrialSplashScreenc46882379ef5409f96efdf43670b5ff2" android:noHistory="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

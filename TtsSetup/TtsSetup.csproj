@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TtsAsyncActivity.cs" />
     <Compile Include="LangSupport.cs" />
     <Compile Include="TestVoiceAsync.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

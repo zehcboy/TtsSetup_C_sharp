@@ -2,7 +2,7 @@ package ttssetup;
 
 
 public class TestVoiceAsync
-	extends android.app.Activity
+	extends ttssetup.TtsAsyncActivity
 	implements
 		mono.android.IGCUserPeer
 {

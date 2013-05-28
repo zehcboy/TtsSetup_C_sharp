@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Настройки TTS</string>
+    <string name="app_name">Настройки TTS (C#)</string>
     <string name="please_wait">Пожалуйста, подождите, пока мы ищем все доступные языки и голосы синтезатора речи...</string>
     <string name="choose_tts">Выберите синтезатор речи</string>
     <string name="sys_def_tts">Система по умолчанию</string>
