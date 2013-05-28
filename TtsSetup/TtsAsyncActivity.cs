@@ -48,7 +48,6 @@ namespace TtsSetup
             {
                 _lastData = null;
                 _requestWanted = requestCode;
-                _event1.Reset();
                 StartActivityForResult(intent, requestCode);
                 // possible exceptions: ActivityNotFoundException, also got SecurityException from com.turboled
                 await Task.Run(delegate { _event1.WaitOne(); });
