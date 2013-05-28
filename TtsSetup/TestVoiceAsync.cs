@@ -110,6 +110,7 @@ namespace TtsSetup
             {
                 Log.Debug(TAG, "Trying to create TTS Engine: " + ei.Name);
                 _tts = await CreateTtsAsync(this, ei.Name);
+                // DISRUPTION 1 from Java code eliminated, we simply await TTS engine initialization here.
                 if (_tts != null)
                 {
                     var el = new EngLang(ei);
@@ -118,6 +119,7 @@ namespace TtsSetup
                     var intent = new Intent(TextToSpeech.Engine.ActionCheckTtsData);
                     intent = intent.SetPackage(el.Ei.Name);
                     Intent data = await StartActivityForResultAsync(intent, LANG_REQUEST);
+                    // DISTRUPTION 2 from Java code eliminated, we simply await until the result returns.
                     try
                     {
                         // don't care if lastData or voices comes out null, just catch exception and continue
