@@ -14,7 +14,8 @@ obj/
 
 # Local configuration file (sdk path, etc)
 *.userprefs
-*.user
+*.csproj.user
+*.v11.suo
 
 # Eclipse project files
 .classpath
