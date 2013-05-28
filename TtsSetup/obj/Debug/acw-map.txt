@@ -1,2 +1,0 @@
-TtsSetup.TtsAsyncActivity;ttssetup.TtsAsyncActivity
-TtsSetup.TestVoiceAsync;ttssetup.TestVoiceAsync
