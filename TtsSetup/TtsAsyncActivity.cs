@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -26,14 +22,27 @@ namespace TtsSetup
         // or null if error.
         protected async Task<TextToSpeech> CreateTtsAsync(Context context, String engName)
         {
+            Log.Debug(TAG, "in CreateTtsAsync() before await, Thread: " + System.Threading.Thread.CurrentThread.ManagedThreadId);
+            TextToSpeech tts;
+            try
+            {
+                tts = new TextToSpeech(context, this, engName);
+            }
+            catch (Exception exc)
+            {
+                Log.Debug(TAG, "TTS engine '" + engName + "' cannot be created, throws exception: " + exc);
+                return null;
+            }
+
             _tcs = new TaskCompletionSource<Java.Lang.Object>();
-            var tts = new TextToSpeech(context, this, engName);
+
             if ((int)await _tcs.Task != (int)OperationResult.Success)
             {
                 Log.Debug(TAG, "Engine: " + engName + " failed to initialize.");
                 tts = null;
             }
             _tcs = null;
+            Log.Debug(TAG, "in CreateTtsAsync() after await, Thread: " + System.Threading.Thread.CurrentThread.ManagedThreadId);
             return tts;
         }
 
@@ -70,6 +79,7 @@ namespace TtsSetup
 
         void TextToSpeech.IOnInitListener.OnInit(OperationResult status)
         {
+            Log.Debug(TAG, "in TTS OnInit(), Thread: " + System.Threading.Thread.CurrentThread.ManagedThreadId);
             Log.Debug(TAG, "OnInit() status = " + status);
             _tcs.SetResult(new Java.Lang.Integer((int)status));
         }

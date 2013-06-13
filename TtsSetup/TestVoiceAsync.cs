@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -10,7 +9,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Java.Util;
-using Object = Java.Lang.Object;
 
 namespace TtsSetup
 {
@@ -109,6 +107,8 @@ namespace TtsSetup
             foreach (TextToSpeech.EngineInfo ei in engines)
             {
                 Log.Debug(TAG, "Trying to create TTS Engine: " + ei.Name);
+                Log.Debug(TAG, "in GetEnginesAndLangsAsync() before await for CreateTtsAsync(), Thread: " + System.Threading.Thread.CurrentThread.ManagedThreadId);
+
                 _tts = await CreateTtsAsync(this, ei.Name);
                 // DISRUPTION 1 from Java code eliminated, we simply await TTS engine initialization here.
                 if (_tts != null)
@@ -289,7 +289,7 @@ namespace TtsSetup
             if (_tts != null) try {
                 _tts.Shutdown();
             } catch { /* don't care */ }
-
+            
             _tts = await CreateTtsAsync(this, pckName);
             if (_tts != null)
             {
