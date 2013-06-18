@@ -79,7 +79,7 @@ namespace TtsSetup
                     {
                         String s1 = (ignoreCase ? "(?i)" : "") + "\\Q" + ss.Substring(0, split) + "\\E";
                         String s2 = ss.Substring(split + 3);
-                        _replace.Add(new StringPair(new Regex(s1, RegexOptions.Compiled), s2));
+                        _replace.Add(new StringPair(new Regex(s1, RegexOptions.None), s2));
                     }
                 }
                 if (_replace.Count == 0)
@@ -109,7 +109,7 @@ namespace TtsSetup
             var wl = new List<String>();
 
             // Now split each paragraph into word lists and use Build() version...
-            var regSpace = new Regex("[\\s]", RegexOptions.Multiline | RegexOptions.Compiled);
+            var regSpace = new Regex("[\\s]", RegexOptions.Multiline | RegexOptions.None);
             Match m0 = new Regex(pattern, RegexOptions.Multiline).Match(sTextEntire);
             int st0 = 0;
             String tag = null;
@@ -168,29 +168,33 @@ namespace TtsSetup
 
             for (i = 0; i < wl.Count; i++)
             {
-                String w = wl[i];
+                // String w = wl[i];
+                var wb = new StringBuilder(wl[i]);
                 bool isAbbrev = false;
-                if (w.Length == 2 && w.EndsWith(".") && char.IsUpper(w[0]))
+                if (wb.Length == 2 && wb[1] == '.' && char.IsUpper(wb[0]))
                 {
-                    w = w.Substring(0, 1) + " ";
+                    wb[1] = ' '; // new StringBuilder(w.Substring(0, 1) + " ");
                 }
                 else
                 {
                     if (loc.ISO3Language.Equals("pol"))
                     {
                         // do this only for Polish, else for Spanish - Ivona pronounces regular '-' as "geeon"
-                        w = w.Replace('\u2013', '-'); // dec 8211, "en dash" or long dash, Ivona PL reads as "przecinek"
-                        w = w.Replace('\u2014', '-'); // dec 8211, 'EM DASH', Ivona PL reads as "przecinek"
+                        wb = wb.Replace('\u2013', '-'); // dec 8211, "en dash" or long dash, Ivona PL reads as "przecinek"
+                        wb = wb.Replace('\u2014', '-'); // dec 8211, 'EM DASH', Ivona PL reads as "przecinek"
                     }
-                    w = w.Replace('\u00A0', ' '); // dec 160, no-break space
-                    w = w.Replace("\u200B", " ");  // dec. 8203, 'zero width space' (do not _replace with empty, or we may get w empty and crash)
-                    w = w.Replace('\u2019', '\''); // RIGHT SINGLE QUOTATION MARK (U+2019), mis-pronounced by Google TTS?
-                    if (w[0] == '\u2026')  // dec 8230 ellipses ... remove at start
-                        w = " " + w.Substring(1);
-                    isAbbrev = IsAbbreviation(w);
+                    wb = wb.Replace('\u00A0', ' '); // dec 160, no-break space
+                    wb = wb.Replace("\u200B", " ");  // dec. 8203, 'zero width space' (do not _replace with empty, or we may get w empty and crash)
+                    wb = wb.Replace('\u2019', '\''); // RIGHT SINGLE QUOTATION MARK (U+2019), mis-pronounced by Google TTS?
+                    if (wb[0] == '\u2026') // dec 8230 ellipses ... remove at start
+                        wb.Remove(0, 1);
+                        // w = " " + w.Substring(1);
+                    isAbbrev = IsAbbreviation(wb.ToString());
                 }
                 bool endSentence = false;
-                char lastCh = w[w.Length - 1];
+                char lastCh = wb[wb.Length - 1];
+
+                String w = wb.ToString();
                 if (!isAbbrev)
                 {
                     endSentence = lastCh == '.' && (i == wl.Count - 1 || !wl[i + 1].Equals(".")) ||

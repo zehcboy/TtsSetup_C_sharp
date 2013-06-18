@@ -10,6 +10,8 @@ using Android.Views;
 using Android.Widget;
 using Java.Util;
 
+#if !API8
+
 namespace TtsSetup
 {
     [Activity(Label = "TtsSetup C#", Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
@@ -44,7 +46,7 @@ namespace TtsSetup
             FindViewById(Resource.Id.wait).Visibility = ViewStates.Visible;
             FindViewById(Resource.Id.main).Visibility = ViewStates.Gone;
 
-            if (Build.VERSION.SdkInt < BuildVersionCodes.IceCreamSandwich)
+            if (Build.VERSION.SdkInt < (BuildVersionCodes) 14)
             {
                 FindViewById<TextView>(Resource.Id.wait_msg).Text = "Sorry, voice selector works only for Android version 4 (ICS) and higher. Press Back button...";
             }
@@ -451,3 +453,4 @@ namespace TtsSetup
     }
 }
 
+#endif

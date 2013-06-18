@@ -46,8 +46,10 @@ namespace TtsSetup
 
         void OnSetupClick(object sender, EventArgs e)
         {
+#if !API8
             var intent = new Intent(this, typeof(VoiceSelectorActivity));
             StartActivity(intent);
+#endif
         }
 
         void OnTestClick(object sender, EventArgs e)

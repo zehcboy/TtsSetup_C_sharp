@@ -5,6 +5,8 @@ using Android.Content;
 using Android.Speech.Tts;
 using Android.Util;
 
+#if !API8
+
 namespace TtsSetup
 {
     // Base class for an activity to create an initialized TextToSpeech
@@ -87,3 +89,4 @@ namespace TtsSetup
     }
 }
 
+#endif
