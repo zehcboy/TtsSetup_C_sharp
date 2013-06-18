@@ -15,8 +15,8 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
-    <AndroidSupportedAbis>x86</AndroidSupportedAbis>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AndroidSupportedAbis>armeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
@@ -55,15 +55,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="TdApp.cs" />
     <Compile Include="TtsAsyncActivity.cs" />
     <Compile Include="LangSupport.cs" />
-    <Compile Include="TestVoiceAsync.cs" />
+    <Compile Include="TtsSentenceExtractor.cs" />
+    <Compile Include="VoiceSelectorActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />
@@ -75,13 +77,17 @@
     <AndroidResource Include="Resources\Layout\voice_sel.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\arrays.xml" />
+    <AndroidResource Include="Resources\Values\arrays.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-pl\arrays.xml" />
+    <AndroidResource Include="Resources\values-pl\arrays.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-pl\strings.xml" />
@@ -90,13 +96,33 @@
     <AndroidResource Include="Resources\values-ru\arrays.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-ru\strings.xml" />
+    <AndroidResource Include="Resources\values-ru\strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\Abbaye.htm" />
+    <AndroidAsset Include="Assets\abbrev-eng.txt" />
+    <AndroidAsset Include="Assets\abbrev-pol.txt" />
+    <AndroidAsset Include="Assets\Boeing.htm" />
+    <AndroidAsset Include="Assets\Edward.htm" />
+    <AndroidAsset Include="Assets\Imperial_German_Navy.htm" />
+    <AndroidAsset Include="Assets\Kosciuszko.htm" />
+    <AndroidAsset Include="Assets\Larry.htm" />
+    <AndroidAsset Include="Assets\ManualRus.htm" />
+    <AndroidAsset Include="Assets\Nebezpeci.htm" />
+    <AndroidAsset Include="Assets\Netherlands.htm" />
+    <AndroidAsset Include="Assets\replace-eng.txt" />
+    <AndroidAsset Include="Assets\replace-fra.txt" />
+    <AndroidAsset Include="Assets\replace-pol.txt" />
+    <AndroidAsset Include="Assets\replace-rus.txt" />
+    <AndroidAsset Include="Assets\Rus2.htm" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <AndroidResource Include="Resources\Layout\main.axml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

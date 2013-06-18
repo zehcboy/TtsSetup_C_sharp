@@ -12,8 +12,8 @@ using Java.Util;
 
 namespace TtsSetup
 {
-    [Activity(Label = "TtsSetup", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
-    public class TestVoiceAsync : TtsAsyncActivity
+    [Activity(Label = "TtsSetup C#", Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
+    public class VoiceSelectorActivity : TtsAsyncActivity
     {
         public const String SELECTED_ENGINE = "com.hyperionics.TtsSetup.SELECTED_ENGINE";
         public const String SELECTED_VOICE = "com.hyperionics.TtsSetup.SELECTED_VOICE";
@@ -43,7 +43,14 @@ namespace TtsSetup
             SetContentView(Resource.Layout.voice_sel);
             FindViewById(Resource.Id.wait).Visibility = ViewStates.Visible;
             FindViewById(Resource.Id.main).Visibility = ViewStates.Gone;
-            GetEnginesAndLangsAsync();
+
+            if (Build.VERSION.SdkInt < BuildVersionCodes.IceCreamSandwich)
+            {
+                FindViewById<TextView>(Resource.Id.wait_msg).Text = "Sorry, voice selector works only for Android version 4 (ICS) and higher. Press Back button...";
+            }
+            else
+                GetEnginesAndLangsAsync(); // we can setup the rest of UI only after this finishes
+
         }
 
         protected override void OnPause()
@@ -360,7 +367,6 @@ namespace TtsSetup
         private class EngLang
         {
             public readonly TextToSpeech.EngineInfo Ei;
-
             public readonly List<String> Iso3ln = new List<String>();
                                          // ISO3 language code, e.g. eng for each voice in voices
 
@@ -444,3 +450,4 @@ namespace TtsSetup
         }
     }
 }
+

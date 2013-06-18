@@ -1,0 +1,8 @@
+; If line starts with ^, the 1st part is case-sensitive, otherwise not.
+; Separator is _exactly_ (space):(space). Empty lines ignored too.
+
+@voice : et wojs
+aloud : elałd
+reader : rider
+^Bluetooth : blu tuf
+prof. : profesor

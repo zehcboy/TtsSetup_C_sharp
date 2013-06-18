@@ -1,0 +1,9 @@
+; If line starts with ^, the 1st part is case-sensitive, otherwise not.
+; Separator is _exactly_ (space):(space). Empty lines ignored too.
+
+; we don't know if it's "Saint" or "Street"...
+; St. : S T
+Rep. : Representative
+; Ivona reads each "no." as "number"
+no. : no
+antiaging : anti-aging
