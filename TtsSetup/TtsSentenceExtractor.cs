@@ -177,6 +177,8 @@ namespace TtsSetup
                 }
                 else
                 {
+                    // Tested this code below with both String w and StringBuilder wb, for our test files there
+                    // is no difference in performance.
                     if (loc.ISO3Language.Equals("pol"))
                     {
                         // do this only for Polish, else for Spanish - Ivona pronounces regular '-' as "geeon"
@@ -187,8 +189,7 @@ namespace TtsSetup
                     wb = wb.Replace("\u200B", " ");  // dec. 8203, 'zero width space' (do not _replace with empty, or we may get w empty and crash)
                     wb = wb.Replace('\u2019', '\''); // RIGHT SINGLE QUOTATION MARK (U+2019), mis-pronounced by Google TTS?
                     if (wb[0] == '\u2026') // dec 8230 ellipses ... remove at start
-                        wb.Remove(0, 1);
-                        // w = " " + w.Substring(1);
+                        wb[0] = ' '; // w = " " + w.Substring(1);
                     isAbbrev = IsAbbreviation(wb.ToString());
                 }
                 bool endSentence = false;
