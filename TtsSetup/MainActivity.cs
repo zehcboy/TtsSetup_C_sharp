@@ -14,10 +14,10 @@ using Android.Widget;
 
 namespace TtsSetup
 {
-    [Activity(Label = "Tts Tests", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
+    [Activity(Label = "Tts Tests (C#)", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.Black")]
     public class MainActivity : Activity
     {
-        public const String TAG = "TtsSetup";
+        public const String TAG = "XTtsSetup";
         long grandTotal = 0;
         long grandTotalWithFiles = 0;
         int numRuns = 0;
@@ -56,6 +56,7 @@ namespace TtsSetup
         {
             String[] fname =
                 {
+                    //"BookZero.txt",
                     "Abbaye.htm",
                     "Boeing.htm",
                     "Edward.htm",
@@ -69,6 +70,7 @@ namespace TtsSetup
                 };
             String[] lang =
                 {
+                    //"eng",
                     "fra",
                     "eng",
                     "eng",
@@ -83,7 +85,7 @@ namespace TtsSetup
             long totalTime = 0;
             var sw0 = new Stopwatch();
             sw0.Start();
-            for (int i = 0; i < fname.Count(); i++)
+            for (int i = 0; i < fname.Length; i++)
             {
                 String text = TdApp.ConvertAssetToString(fname[i]);
                 var sw = new Stopwatch();

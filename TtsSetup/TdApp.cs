@@ -52,6 +52,29 @@ namespace TtsSetup
             return text == null ? null : text.ToString();
         }
 
+        //public static String ConvertAssetToString(String assetName)
+        //{
+        //    StringBuilder text = null;
+        //    try
+        //    {
+        //        using (var str = new StreamReader(Application.Context.Assets.Open(assetName)))
+        //        {
+        //            text = new StringBuilder();
+        //            while (str.Peek() > 0)
+        //            {
+        //                String line = str.ReadLine();
+        //                if (line == null) break;
+        //                line = line.Trim();
+        //                text.Append(line);
+        //                text.Append("\n");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception) { }
+
+        //    return text == null ? null : text.ToString();
+        //}
+
         public static String ConvertAssetToString(String assetName)
         {
             String text;
